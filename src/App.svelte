@@ -1,9 +1,15 @@
 <script>
   import { crossfade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  import * as lib from "test-iota-client-wasm/web/";
-  let node = "https://api.lb-0.testnet.chrysalis2.com/";
   import { writable } from "svelte/store";
+  import * as lib from "test-iota-client-wasm/web/";
+  let iota_node = "";
+  // save iota_node to local storage
+  let iota_node_store = writable(localStorage.getItem("iota_node") || "");
+  iota_node_store.subscribe((val) => {
+    localStorage.setItem("iota_node", val);
+    iota_node = val;
+  });
   // save mnemonic to local storage
   let mnemonic = "";
   let mnemonic_store = writable(localStorage.getItem("mnemonic") || "");
@@ -26,7 +32,7 @@
   async function send_message() {
     try {
       await lib.init();
-      let iota_client = await new lib.ClientBuilder().node(node).build();
+      let iota_client = await new lib.ClientBuilder().node(iota_node).build();
       let message_builder = iota_client.message();
       if (index != "") {
         message_builder = message_builder.index(
@@ -73,7 +79,7 @@
   async function get_messages() {
     try {
       await lib.init();
-      let iota_client = await new lib.ClientBuilder().node(node).build();
+      let iota_client = await new lib.ClientBuilder().node(iota_node).build();
       let messageIds = await iota_client
         .getMessage()
         .index(new TextEncoder().encode(index));
@@ -92,8 +98,9 @@
     }
   }
   async function generate_mnemonic() {
+    add("previous mnemonic: " + mnemonic);
     await lib.init();
-    let iota_client = await new lib.ClientBuilder().node(node).build();
+    let iota_client = await new lib.ClientBuilder().offlineMode().build();
     mnemonic_store.set(iota_client.generateMnemonic());
     console.log(mnemonic);
     add(mnemonic);
@@ -101,7 +108,7 @@
   async function generate_address() {
     try {
       await lib.init();
-      let iota_client = await new lib.ClientBuilder().node(node).build();
+      let iota_client = await new lib.ClientBuilder().node(iota_node).build();
       let addresses = await iota_client
         .getAddresses(iota_client.mnemonicToHexSeed(mnemonic))
         .accountIndex(0)
@@ -117,7 +124,7 @@
   async function get_balance() {
     try {
       await lib.init();
-      let iota_client = await new lib.ClientBuilder().node(node).build();
+      let iota_client = await new lib.ClientBuilder().node(iota_node).build();
       let balance = await iota_client
         .getBalance(iota_client.mnemonicToHexSeed(mnemonic))
         .get();
@@ -172,7 +179,7 @@
 <main>
   <h1>IOTA client</h1>
 
-  <input bind:value={node} placeholder="IOTA node url" />
+  <input bind:value={$iota_node_store} placeholder="IOTA node url" />
   <br />
   <input
     style="width: 80%;"
