@@ -2,7 +2,7 @@
   import { crossfade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   import { writable } from "svelte/store";
-  import * as lib from "test-iota-client-wasm/web/";
+  import * as lib from "@iota/client-wasm/web/";
   let iota_node = "";
   // save iota_node to local storage
   let iota_node_store = writable(localStorage.getItem("iota_node") || "");
@@ -27,7 +27,7 @@
     { type: `SignatureLockedDustAllowance` },
   ];
   let selected_output_type;
-  let explorer_link = "https://explorer.iota.org/testnet";
+  let explorer_link = "https://explorer.iota.org/devnet";
 
   async function send_message() {
     try {
@@ -68,7 +68,7 @@
       if (network_info.bech32HRP == "iota") {
         explorer_link = `https://explorer.iota.org/mainnet/message/${message.messageId}`;
       } else {
-        explorer_link = `https://explorer.iota.org/testnet/message/${message.messageId}`;
+        explorer_link = `https://explorer.iota.org/devnet/message/${message.messageId}`;
       }
       console.log(explorer_link);
     } catch (e) {

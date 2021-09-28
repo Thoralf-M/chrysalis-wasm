@@ -18,6 +18,6 @@
   },
   "dependencies": {
     "sirv-cli": "^1.0.0",
-    "test-iota-client-wasm": "^0.0.8"
+    "@iota/client-wasm": "^0.1.2"
   }
 }

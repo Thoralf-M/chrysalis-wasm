@@ -1,5 +1,5 @@
 import App from './App.svelte';
-import * as lib from "test-iota-client-wasm/web/";
+import * as lib from "@iota/client-wasm/web/";
 // export lib here to it can be used in the browser console like this
 // async function test(){
 //     let iota_client = await new globalThis.app.lib.ClientBuilder().node("https://chrysalis-nodes.iota.org/").build();

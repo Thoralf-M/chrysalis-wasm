@@ -73,9 +73,9 @@ export default {
 		production && terser(),
 		copy({
 			targets: [{
-				src: 'node_modules/test-iota-client-wasm/web/iota_client_wasm_bg.wasm',
+				src: 'node_modules/@iota/client-wasm/web/client_wasm_bg.wasm',
 				dest: 'public',
-				rename: 'iota_client_wasm_bg.wasm'
+				rename: 'client_wasm_bg.wasm'
 			}]
 		})
 	],
