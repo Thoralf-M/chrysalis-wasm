@@ -28,6 +28,7 @@
   ];
   let selected_output_type;
   let explorer_link = "https://explorer.iota.org/devnet";
+  let message_id = "";
 
   async function send_message() {
     try {
@@ -135,6 +136,19 @@
       add(e);
     }
   }
+  async function retry() {
+    try {
+      await lib.init();
+      let iota_client = await new lib.ClientBuilder().node(iota_node).build();
+      let res = await iota_client.retryUntilIncluded(message_id);
+      console.log(res);
+      add(res);
+    } catch (e) {
+      console.log(e);
+      add(e);
+    }
+  }
+
   async function one_mi() {
     output_amount = 1_000_000;
   }
@@ -217,6 +231,9 @@
     placeholder="Address index"
   />
   <button on:click={generate_address}>Generate address</button>
+  <br />
+  <input bind:value={message_id} placeholder="Message id" />
+  <button on:click={retry}>Retry message</button>
   <br />
   <a href={explorer_link} target="_blank" rel="noopener noreferrer"
     >Explorer link for sent messages</a
